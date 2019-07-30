@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>TextTown 2.1</title>
     <link rel="stylesheet" href="ttStyle.css">
+    <link rel="stylesheet" href="themeDark.css">
     <script src="mainScript.js"></script>
     <script src="lists.js"></script>
     <script src="person.js"></script>
@@ -14,12 +15,14 @@
 </head>
 <body>
 <div id="masterContainer">
-    <div id="timeStuff">
-        <div id="time">(0) January 2020</div>
-        <button onclick="changeSpeed(0)">■</button>
-        <button onclick="changeSpeed(5000)">►</button>
-        <button onclick="changeSpeed(500)">►►</button>
-        <button onclick="changeSpeed(100)">►►►</button>
+    <div id="time">
+        <div id="date">(0) January 2020</div>
+        <div id="timeButtons">
+            <button onclick="changeSpeed(this)" value="0">■</button>
+            <button onclick="changeSpeed(this)" value="5000" style="background-color: gray">►</button>
+            <button onclick="changeSpeed(this)" value="500">►►</button>
+            <button onclick="changeSpeed(this)" value="100">►►►</button>
+        </div>
     </div>
     <div id="eventsTitle">
         <h1>Events</h1>
@@ -86,13 +89,19 @@
         <!--        <button>Internet</button>-->
     </div>
     <div id="infoSelectContainer">
-        <div id="statSelect" onclick="details(city)">City</div>
-        <div id="infoSelect" onclick="details(stats)">Statistics</div>
+        <div id="citySelect" onclick="details(city)">City</div>
+        <div id="statSelect" onclick="details(stats)">Statistics</div>
     </div>
-    <div id="moreContainer">
+    <div id="infoBox">
         <!--<button id="infoBack" onclick="details(lastObject)">◀️</button>-->
         <h1 id="infoTitle"></h1>
         <div id="infoContainer"></div>
+    </div>
+    <div id="settings">
+        <label>
+            <input type="radio" name="theme" value="light" oninput="themeChange(value)" checked> Light theme <br>
+            <input type="radio" name="theme" value="dark" oninput="themeChange(value)"> Dark theme (WIP)
+        </label>
     </div>
 </div>
 </body>

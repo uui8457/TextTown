@@ -7,18 +7,21 @@
 -Change the terminology for education, having one function get the correct name for everything ✅
 -Make people breed, and date+marry? ✅
 -Create a back button in the more info box 🔴
+-Fix the time buttons' styling ✅
 -Add an event log tied to every object (a life story, pretty much) (but how?) ❓
 -Would it be a better idea to calculate a person's family and occupation by filter instead of separate arrays? ❓
 -Should businesses be owned by a person and then passed down to a child if possible, and otherwise be removed? ❓
 
 SMALL STUFF
 -Change the system for homelessness, perhaps to a park that is already present at the beginning?
--Rename "moreContainer" and the whole Info thing to make it logical
 -Tweak the mortality curve to make people die less at a young age
--Add dark mode & toggle (add settings box)
--Fix the time buttons' styling
+-Fix dark mode, with proper styling
+-fix pointer styles
+-Separate CSS into relevant chunks to make it easier to piece together afterwards
 -People are not breeding quite enough
+-Fix event feed, so as to reduce lag. Rewrite and put in an array (events as objects in array) (make event class?) (change the name?)
 
 BIG STUFF
 -Add graphs, using canvas?
 -Add happiness
+-Use database for info instead of large arrays. JSON?

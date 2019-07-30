@@ -22,14 +22,14 @@ class Family { //Change it so that members are created separately and then put i
                 this.residence.residents.splice(this.residence.residents.indexOf(this), 1);
             }
             city.families.splice(city.families.indexOf(this), 1);
-            newLink(["The last member of", this.name, "is dead"]);
+            newEvent(["The last member of", this.name, "is dead"]);
             return;
         }
 
         this.members.forEach(person => person.update()); //Families can be abandoned, fix this in some way
 
         if (!(this.residence instanceof Building)) {
-            newLink([this, "want a house to live in"]);
+            newEvent([this, "want a house to live in"]);
             this.findResidence()
         }
 
@@ -39,7 +39,7 @@ class Family { //Change it so that members are created separately and then put i
                 let newBorn = new Person(0,0);
                 newBorn.family = this;
                 this.members.push(newBorn);
-                newLink([this, "welcomes", newBorn, "to the family and the world!"])
+                newEvent([this, "welcomes", newBorn, "to the family and the world!"])
             }
         }
 
@@ -59,7 +59,7 @@ class Family { //Change it so that members are created separately and then put i
         } else {
             this.residence = randIn(vacancies);
             this.residence.residents.push(this);
-            newLink([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
+            newEvent([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
         }
     }
 }

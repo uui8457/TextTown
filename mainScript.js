@@ -1,9 +1,4 @@
-// We listen to the resize event
-window.addEventListener('resize', () => {
-    // We execute the same script as before
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-});
+
 
 let city = {
     name: "City",
@@ -62,7 +57,7 @@ let stats = {
     }
 };
 
-// let openInfo = []; for old back button
+let detailedObject;
 
 let timeStep = setInterval(update, 2500);
 let time = {
@@ -85,30 +80,45 @@ let time = {
     }
 };
 
-function changeSpeed(speed) {
+
+window.addEventListener("DOMContentLoaded", () => {
+    details(city);
+    themeChange("light")
+});
+
+// We listen to the resize event
+window.addEventListener('resize', () => {
+    // We execute the same script as before
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
+
+function changeSpeed(button) {
     // console.log(Array.from(document.getElementById("timeStuff").children));
-    Array.from(document.getElementById("timeStuff").children).forEach(button => button.style.backgroundColor = "white");
-    event.target.style.backgroundColor = "gray";
+    Array.from(document.getElementById("timeButtons").children).forEach(button => button.style.backgroundColor = "lightgray");
+    button.style.backgroundColor = "gray";
     clearInterval(timeStep);
-    if (speed > 10) {
-        timeStep = setInterval(update, speed)
+    if (button.value > 10) {
+        timeStep = setInterval(update, button.value)
     }
 }
 
 function update() {
     time.elapsedMonths++;
 
-    document.getElementById("time").innerText = `(${time.elapsedYears}) ${time.date}`;
+    document.getElementById("date").innerText = `(${time.elapsedYears}) ${time.date}`;
 
     if (time.month === 0) {
-        newLink([`Happy new year ${time.year}!`]);
+        newEvent([`Happy new year ${time.year}!`]);
     }
 
-    city.families.forEach(family => family.update())
+    city.families.forEach(family => family.update());
+
+    details(detailedObject); // Makes the open object update automatically (re-opens it every update, might cause problems with a back button)
 }
 
 
-function newLink(textArray) {
+function newEvent(textArray) {
     let container = document.getElementById("eventsContainer");
     //If there are too many events, remove the oldest ones.
     // while (container.childNodes.length > 200) {
@@ -147,6 +157,7 @@ function newLink(textArray) {
 
 function details(object) { //For a back button: add the previous object onclick before deleting all elements
     let container = document.getElementById("infoContainer");
+    detailedObject = object;
 
     //Set the back button
     // document.getElementById("infoBack").onclick = () => {
@@ -213,10 +224,9 @@ function filterEvents() {
 }
 
 function preFabFamily() {
-    let members = [];
     // createMembers() {
     //Create adults, consider making it a possibility of having only one adult.
-    members = [
+    let members = [
         new Person(myRand(30*12, 50*12), myRand(0, 3)),
         new Person(myRand(30*12, 50*12), myRand(0, 3)),
     ];
@@ -252,5 +262,17 @@ function starterKit() {
     new Residential(3, 2);
     for (let n = 0; n < 10; n++) {
         preFabFamily()
+    }
+}
+
+function themeChange(theme) {
+    let darkStyle = document.styleSheets[1];
+
+    switch (theme) {
+        case "light":
+            darkStyle.disabled = true;
+            break;
+        case "dark":
+            darkStyle.disabled = false;
     }
 }

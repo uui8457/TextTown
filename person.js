@@ -25,14 +25,14 @@ class Person {
                 this.graduate()
             }
             if (this.occupation instanceof Workplace && this.occupation.level < this.educationLevel) {
-                newLink([this, "is underpaid and wants a better job."]);
+                newEvent([this, "is underpaid and wants a better job."]);
                 this.findOccupation()
             }
             // risk at age x = Math.exp(x/20)/1000
         }
         //Retire:
         if (this.occupation !== undefined && this.age >= 70) {
-            newLink([this, "has retired from their work at", this.occupation]);
+            newEvent([this, "has retired from their work at", this.occupation]);
             this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
             this.occupation = undefined;
         }
@@ -40,12 +40,12 @@ class Person {
 
         //Find a partner
         if (this.age >= 25 && this.partner === undefined) {
-            // newLink([this, "wants to find a partner"]);
+            // newEvent([this, "wants to find a partner"]);
             let singles = city.population.filter(person => person.partner === undefined && person.age <= this.age + 5 && person.age >= this.age - 5 && person.family !== this.family); //Consider making the age range larger for older this.ages
             if (singles.length !== 0) {
                 this.partner = randIn(singles);
                 this.partner.partner = this;
-                newLink([this, "is now together with", this.partner]);
+                newEvent([this, "is now together with", this.partner]);
                 //Time to make a new family:
                 //Splice them out of current family and
 
@@ -84,9 +84,9 @@ class Person {
             //     this.family.residence.residents.splice(this.family.residence.residents.indexOf(this.family), 1);
             // }
             // city.families.splice(city.families.indexOf(this.family), 1);
-            // newLink(["The last member of", this.family.name, "is dead"])
+            // newEvent(["The last member of", this.family.name, "is dead"])
         } else {
-            newLink([this.family, "is mourning the loss of", this.name, "at the age of", this.age])
+            newEvent([this.family, "is mourning the loss of", this.name, "at the age of", this.age])
         }
     }
 
@@ -143,7 +143,7 @@ class Person {
         if (vacantSchools.length !== 0) {
             this.occupation = randIn(vacantSchools);
             this.occupation.students.push(this);
-            newLink([this, "is now studying at", this.occupation])
+            newEvent([this, "is now studying at", this.occupation])
         }
     }
 
@@ -163,13 +163,13 @@ class Person {
                 }
                 this.occupation = randIn(vacantWorkplaces.filter(work => work.level === n));
                 this.occupation.workers.push(this);
-                newLink([this, "is now working at", this.occupation]);
+                newEvent([this, "is now working at", this.occupation]);
                 break
             }
         }
         if (this.occupation === undefined) {
             // console.log(this, "could not find work at level", n)
-            newLink([this, "could not find any work."])
+            newEvent([this, "could not find any work."])
         }
 
         // if (this.educationLevel >= 3 && vacantWorkplaces.filter(work => work.level === 3).length !== 0) {
@@ -189,14 +189,14 @@ class Person {
         //     this.occupation.workers.push(this);
         // }
         // else {
-        //     newLink([this, "could not find any work."]);
+        //     newEvent([this, "could not find any work."]);
         // }
     }
 
     graduate() {
         // Remove this from occupation, and give ++ educationlevel
         this.educationLevel++;
-        newLink([this, "has graduated from", this.occupation]);
+        newEvent([this, "has graduated from", this.occupation]);
         this.occupation.students.splice(this.occupation.students.indexOf(this));
         this.occupation = undefined;
 

@@ -1,0 +1,11 @@
+body {
+    background-color: #161410;
+    color: #eee;
+}
+button, input {
+    background-color: lightgray;
+    color: #161410;
+}
+a {
+    color: lightblue;
+}
