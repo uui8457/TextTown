@@ -15,9 +15,8 @@ SMALL STUFF
 -Change the system for homelessness, perhaps to a park that is already present at the beginning?
 -Rename "moreContainer" and the whole Info thing to make it logical
 -Tweak the mortality curve to make people die less at a young age
--Add dark mode & toggle
+-Add dark mode & toggle (add settings box)
 -Fix the time buttons' styling
--Something is wrong with the monthAge calc, some get Smarch, or undefined ⚠️
 -People are not breeding quite enough
 
 BIG STUFF
