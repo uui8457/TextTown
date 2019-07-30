@@ -1,0 +1,25 @@
+
+-Add more fine-tuned buttons with a nice ui ✅
+-Remove old events so it doesn't run out of memory ✅
+-Add a filter system to the event feed ✅
+-Remove stupid road names who have numbers in them ✅
+-Make people die ✅️ and retire. ✅
+-Change the terminology for education, having one function get the correct name for everything ✅
+-Make people breed, and date+marry? ✅
+-Create a back button in the more info box 🔴
+-Add an event log tied to every object (a life story, pretty much) (but how?) ❓
+-Would it be a better idea to calculate a person's family and occupation by filter instead of separate arrays? ❓
+-Should businesses be owned by a person and then passed down to a child if possible, and otherwise be removed? ❓
+
+SMALL STUFF
+-Change the system for homelessness, perhaps to a park that is already present at the beginning?
+-Rename "moreContainer" and the whole Info thing to make it logical
+-Tweak the mortality curve to make people die less at a young age
+-Add dark mode & toggle
+-Fix the time buttons' styling
+-Something is wrong with the monthAge calc, some get Smarch, or undefined ⚠️
+-People are not breeding quite enough
+
+BIG STUFF
+-Add graphs, using canvas?
+-Add happiness

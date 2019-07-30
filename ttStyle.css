@@ -1,0 +1,167 @@
+/*For dark mode*/
+/*body {*/
+/*    background-color: #111;*/
+/*    color: lightgray;*/
+/*}*/
+/*button, input {*/
+/*    background-color: #333;*/
+/*    color: white;*/
+/*}*/
+/*a {*/
+/*    color: lightblue;*/
+/*}*/
+
+div {
+    box-sizing: border-box;
+    /*box-shadow:*/
+    /*2px 0 0 0 #888,*/
+    /*0 2px 0 0 #888,*/
+    /*2px 2px 0 0 #888,   !* Just to fix the corner *!*/
+    /*2px 0 0 0 #888 inset,*/
+    /*0 2px 0 0 #888 inset;*/
+    /*box-shadow: 0 0 1px black;*/
+}
+
+#masterContainer {
+    /*background-color: cornflowerblue;*/
+    display: grid;
+    grid-template-columns: 75px 100px auto 40%;
+    grid-template-rows: 50px auto 10%;
+    /*height: 100vh; !* Fallback for browsers that do not support Custom Properties *!*/
+    height: calc(var(--vh, 1vh) * 98);
+    user-select: none;
+}
+
+#timeStuff {
+    grid-column: 1/span 2;
+    grid-row: 1;
+}
+
+#eventsTitle {
+    grid-column: 3;
+    grid-row: 1;
+    place-self: center;
+}
+
+#eventBox {
+    border: 1px solid black;
+    grid-column: 2/span 2;
+    grid-row: 2/span 2;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 30px auto;
+    overflow: auto;
+}
+
+#eventFilter {
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+    border: 1px solid black;
+}
+
+#eventsContainer {
+    overflow: auto;
+    grid-row: 2;
+}
+
+.event {
+    padding: 4px;
+    border: 1px solid black;
+    opacity: 0;
+    transition: opacity 1s;
+    display: grid;
+    grid-template-columns: auto 120px;
+    grid-template-rows: auto;
+}
+
+.eventDate {
+    text-align: right;
+}
+
+#buttonContainer {
+    grid-column: 1;
+    grid-row: 2/span 2;
+    display: grid;
+    grid-template-columns: auto;
+    overflow: auto;
+}
+
+#buttonContainer button {
+    margin: 0;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 0;
+    /*background-color: white;*/
+}
+
+#infoSelectContainer {
+    grid-column: 4;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#infoTitle {
+    padding: 5px;
+}
+
+#infoContainer > div {
+    display: grid;
+    grid-template-columns: 50% auto;
+    grid-template-rows: auto;
+    padding: 4px;
+    border: 1px solid black;
+}
+
+#infoContainer > div > div {
+    display: grid;
+    grid-template-columns: auto;
+    place-self: center;
+    justify-self: start;
+}
+
+.data * {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+#statSelect, #infoSelect {
+    place-self: center;
+}
+
+#moreContainer {
+    border: 1px solid black;
+    grid-column: 4;
+    grid-row: 2;
+    overflow: auto;
+}
+
+/*#moreContainer > button {*/
+/*height: 50px;*/
+/*width: 20%;*/
+/*font-size: 20px;*/
+/*}*/
+
+.dropDown {
+    display: grid;
+    height: 50px;
+}
+
+.dropBtn {
+    padding: 0;
+}
+
+.dropDownContent {
+    display: none;
+    position: absolute;
+    left: 83px;
+}
+
+.dropDownContent > button {
+    grid-row-start: 1;
+    width: 75px;
+}
+
+.dropDown:hover .dropDownContent {
+    display: grid;
+}
