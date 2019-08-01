@@ -109,7 +109,7 @@ function update() {
     document.getElementById("date").innerText = `(${time.elapsedYears}) ${time.date}`;
 
     if (time.month === 0) {
-        newEvent([`Happy new year ${time.year}!`]);
+        createEvent([`Happy new year ${time.year}!`]);
     }
 
     city.families.forEach(family => family.update());
@@ -118,42 +118,42 @@ function update() {
 }
 
 
-function newEvent(textArray) {
-    let container = document.getElementById("eventsContainer");
-    //If there are too many events, remove the oldest ones.
-    // while (container.childNodes.length > 200) {
-    //     container.removeChild(container.lastChild)
-    // }
-
-    let event = document.createElement("div");
-    event.className = "event";
-    let content = document.createElement("div");
-    textArray.forEach(function (bit) {
-        if (typeof bit === "object") {
-            let link = document.createElement("a");
-            link.innerText = bit.name;
-            link.setAttribute('href', "javascript:void(0)");
-            link.onclick = () => details(bit); // This is what needs to be a new function
-            content.appendChild(link)
-        } else {
-            let text = document.createElement("span");
-            text.innerText = ` ${bit} `;
-            content.appendChild(text)
-        }
-    });
-    event.appendChild(content);
-
-    //Add date div
-    let date = document.createElement("div");
-    date.className = "eventDate";
-    date.innerText = time.date;
-    event.appendChild(date);
-    container.insertBefore(event, document.getElementById("eventsContainer").firstChild);
-    filterEvents();
-
-    setTimeout(() => event.style.opacity = "1", 1);
-
-}
+// function newEvent(textArray) {
+//     let container = document.getElementById("eventsContainer");
+//     //If there are too many events, remove the oldest ones.
+//     // while (container.childNodes.length > 200) {
+//     //     container.removeChild(container.lastChild)
+//     // }
+//
+//     let event = document.createElement("div");
+//     event.className = "event";
+//     let content = document.createElement("div");
+//     textArray.forEach(function (bit) {
+//         if (typeof bit === "object") {
+//             let link = document.createElement("a");
+//             link.innerText = bit.name;
+//             link.setAttribute('href', "javascript:void(0)");
+//             link.onclick = () => details(bit); // This is what needs to be a new function
+//             content.appendChild(link)
+//         } else {
+//             let text = document.createElement("span");
+//             text.innerText = ` ${bit} `;
+//             content.appendChild(text)
+//         }
+//     });
+//     event.appendChild(content);
+//
+//     //Add date div
+//     let date = document.createElement("div");
+//     date.className = "eventDate";
+//     date.innerText = time.date;
+//     event.appendChild(date);
+//     container.insertBefore(event, document.getElementById("eventsContainer").firstChild);
+//     filterEvents();
+//
+//     setTimeout(() => event.style.opacity = "1", 1);
+//
+// }
 
 function details(object) { //For a back button: add the previous object onclick before deleting all elements
     let container = document.getElementById("infoContainer");
@@ -210,18 +210,6 @@ function details(object) { //For a back button: add the previous object onclick 
     }
 }
 
-function filterEvents() {
-    let events = document.getElementById("eventsContainer").childNodes;
-    let filter = document.getElementById("eventFilter").value.toUpperCase();
-
-    for (let n = 0; n < events.length; n++) {
-        if (events[n].textContent.toUpperCase().indexOf(filter) > -1) {
-            events[n].style.display = "grid";
-        } else {
-            events[n].style.display = "none";
-        }
-    }
-}
 
 function preFabFamily() {
     // createMembers() {
@@ -274,5 +262,56 @@ function themeChange(theme) {
             break;
         case "dark":
             darkStyle.disabled = false;
+    }
+}
+let events = [
+];
+
+function createEvent(inputEvent) {
+    //Push into array, with date
+    events.push({event: inputEvent, date: time.date});
+    //call func "make tableRow"
+    createRow(events.length-1)
+}
+function createRow(index) {
+    let textArray = events[index].event;
+
+
+    let table = document.getElementById("eventsTable");
+    let row = table.insertRow(0);
+    let eventCell = row.insertCell(0);
+    let dateCell = row.insertCell(1);
+
+    let content = document.createElement("div");
+    textArray.forEach((bit) => {
+        if (typeof bit === "object") {
+            let link = document.createElement("a");
+            link.innerText = bit.name;
+            link.setAttribute('href', "javascript:void(0)");
+            link.onclick = () => details(bit); // This is what needs to be a new function
+            eventCell.appendChild(link)
+        } else {
+            let text = document.createElement("span");
+            text.innerText = ` ${bit} `;
+            eventCell.appendChild(text)
+        }
+    });
+    //What do these do?
+    filterEvents();
+    setTimeout(() => row.style.opacity = "1", 1);
+
+    dateCell.innerText = " " + events[index].date
+}
+
+function filterEvents() {
+    let eventRows = document.getElementById("eventsTable").getElementsByTagName("tr");
+    let filter = document.getElementById("eventFilter").value.toUpperCase();
+
+    for (let n = 0; n < eventRows.length; n++) {
+        if (eventRows[n].textContent.toUpperCase().indexOf(filter) > -1) {
+            eventRows[n].style.display = "";
+        } else {
+            eventRows[n].style.display = "none";
+        }
     }
 }

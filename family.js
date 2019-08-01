@@ -22,24 +22,24 @@ class Family { //Change it so that members are created separately and then put i
                 this.residence.residents.splice(this.residence.residents.indexOf(this), 1);
             }
             city.families.splice(city.families.indexOf(this), 1);
-            newEvent(["The last member of", this.name, "is dead"]);
+            createEvent(["The last member of", this.name, "is dead"]);
             return;
         }
 
         this.members.forEach(person => person.update()); //Families can be abandoned, fix this in some way
 
         if (!(this.residence instanceof Building)) {
-            newEvent([this, "want a house to live in"]);
+            createEvent([this, "want a house to live in"]);
             this.findResidence()
         }
 
-        if (this.members[0].partner === this.members[1] && this.members.length <= 4) { //if both parents are present
+        if (this.members[0].partner === this.members[1] && this.members.length <= 4) { //if both parents are present. throws an error if one is dead, maybe?
             if (Math.random() > 1 - (Math.pow(this.members.length, 2) / 1000)) {
                 console.log("new baby");
                 let newBorn = new Person(0,0);
                 newBorn.family = this;
                 this.members.push(newBorn);
-                newEvent([this, "welcomes", newBorn, "to the family and the world!"])
+                createEvent([this, "welcomes", newBorn, "to the family and the world!"])
             }
         }
 
@@ -59,7 +59,7 @@ class Family { //Change it so that members are created separately and then put i
         } else {
             this.residence = randIn(vacancies);
             this.residence.residents.push(this);
-            newEvent([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
+            createEvent([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
         }
     }
 }

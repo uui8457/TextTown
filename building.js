@@ -17,7 +17,7 @@ class Building {
 
     set buildingName(name) {
         this.name = name; //Well this is redundant, or is it?
-        newEvent([this, " has just been built at", this.street, this.streetNumber]);
+        createEvent([this, " has just been built at", this.street, this.streetNumber]);
     }
 
     get streetNumber() {
