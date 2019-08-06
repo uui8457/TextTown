@@ -1,11 +1,17 @@
 body {
-    background-color: #161410;
-    color: #eee;
+    background-color: rgb(43, 43, 43);
+    color: rgb(186, 186, 186);
 }
+
 button, input {
-    background-color: lightgray;
-    color: #161410;
+    background-color: rgb(60, 60, 60);
+    color: rgb(186, 186, 186);
 }
+
+tr {
+    border-bottom: 1px solid rgb(60, 60, 60);
+}
+
 a {
-    color: lightblue;
+    color: rgb(102, 102, 204);
 }

@@ -58,7 +58,7 @@ class Family { //Change it so that members are created separately and then put i
             this.residence = randIn(homelessPlaces);
         } else {
             this.residence = randIn(vacancies);
-            // this.residence.residents.push(this);
+            this.residence.residents.push(this);
             createEvent([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
         }
     }

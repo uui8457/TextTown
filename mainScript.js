@@ -49,28 +49,6 @@ let city = {
         ]
     }
 };
-let stats = {
-    name: "Statistics",
-    get meanAge() {
-        let totalMonthAge = 0;
-        city.population.forEach(person => totalMonthAge += person.monthAge);
-        return (totalMonthAge / 12) / city.population.length
-    },
-    get meanEducation() {
-        let totalEducation = 0;
-        city.population.forEach(person => totalEducation += person.educationLevel);
-        return totalEducation / city.population.length
-    },
-    get info() {
-        return [
-            {property: "Population", value: city.population.length},
-            {property: "Mean age", value: this.meanAge},
-            {property: "Mean education", value: this.meanEducation},
-            // # of Empty homes
-            // # empty workplaces and so on
-        ]
-    }
-};
 
 let detailedObject;
 
@@ -95,15 +73,18 @@ let time = {
     }
 };
 
+let events = [];
+
 window.addEventListener("DOMContentLoaded", () => {
-    details(city);
-    themeChange("light");
+    details(stats);
+    // themeChange("light");
     document.getElementById("eventFilter").addEventListener("keyup", () => {
         filterEvents()
     });
     document.getElementById("eventFilter").addEventListener("search", () => {
         filterEvents()
     });
+    document.getElementById("graphRange").addEventListener("input", statGraph);
 });
 
 // We listen to the resize event
@@ -124,9 +105,14 @@ function changeSpeed(button) {
 }
 
 function update() {
+    statGraph();
     time.elapsedMonths++;
 
     document.getElementById("date").innerText = `(${time.elapsedYears}) ${time.date}`;
+
+    while (document.getElementById("eventsTable").rows.length > 5000) {
+        shaveEvents();
+    }
 
     if (time.month === 0) {
         createEvent([`Happy new year ${time.year}!`]);
@@ -136,44 +122,6 @@ function update() {
 
     details(detailedObject); // Makes the open object update automatically (re-opens it every update, might cause problems with a back button)
 }
-
-
-// function newEvent(textArray) {
-//     let container = document.getElementById("eventsContainer");
-//     //If there are too many events, remove the oldest ones.
-//     // while (container.childNodes.length > 200) {
-//     //     container.removeChild(container.lastChild)
-//     // }
-//
-//     let event = document.createElement("div");
-//     event.className = "event";
-//     let content = document.createElement("div");
-//     textArray.forEach(function (bit) {
-//         if (typeof bit === "object") {
-//             let link = document.createElement("a");
-//             link.innerText = bit.name;
-//             link.setAttribute('href', "javascript:void(0)");
-//             link.onclick = () => details(bit); // This is what needs to be a new function
-//             content.appendChild(link)
-//         } else {
-//             let text = document.createElement("span");
-//             text.innerText = ` ${bit} `;
-//             content.appendChild(text)
-//         }
-//     });
-//     event.appendChild(content);
-//
-//     //Add date div
-//     let date = document.createElement("div");
-//     date.className = "eventDate";
-//     date.innerText = time.date;
-//     event.appendChild(date);
-//     container.insertBefore(event, document.getElementById("eventsContainer").firstChild);
-//     filterEvents();
-//
-//     setTimeout(() => event.style.opacity = "1", 1);
-//
-// }
 
 function details(object) { //For a back button: add the previous object onclick before deleting all elements
     let container = document.getElementById("infoContainer");
@@ -290,8 +238,6 @@ function themeChange(theme) {
     }
 }
 
-let events = [];
-
 function createEvent(inputEvent) {
     //Push into array, with date
     events.push({event: inputEvent, date: time.date});
@@ -340,6 +286,20 @@ function filterEvents() {
             eventRows[n].style.display = "none";
         }
     }
+}
+
+function shaveEvents() {
+    let table = document.getElementById("eventsTable");
+    table.deleteRow(table.rows.length-1);
+    table.deleteRow(table.rows.length-1);
+
+    // let row = table.insertRow(table.rows.length);
+    // let eventCell = row.insertCell(0);
+    // let moreButton = document.createElement("button");
+    // moreButton.innerText = "Load more";
+    // eventCell.appendChild(moreButton);
+    //
+    // setTimeout(() => row.style.opacity = "1", 1);
 }
 
 function autoSplice(object, target) { //Probably necessary

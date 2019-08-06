@@ -13,6 +13,7 @@
     <script src="building.js"></script>
     <script src="workplace.js"></script>
     <script src="hospital.js"></script>
+    <script src="statistics.js"></script>
 </head>
 <body>
 <div id="masterContainer">
@@ -108,6 +109,8 @@
         <!--<button id="infoBack" onclick="details(lastObject)">◀️</button>-->
         <h1 id="infoTitle"></h1>
         <div id="infoContainer"></div>
+        <canvas id="statCanvas" width="500" height="400" style="border: solid 1px black"></canvas>
+        <input type="range" id="graphRange" min="1" max="10" value="1" style="width: 500px">
     </div>
     <div id="settings">
         <label>

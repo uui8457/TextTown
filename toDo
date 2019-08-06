@@ -18,7 +18,7 @@ SMALL STUFF
 -Fix dark mode, with proper styling
 -fix pointer styles
 -Separate CSS into relevant chunks to make it easier to piece together afterwards
--People are not breeding quite enough
+-People are not breeding quite enough, or are they?
 -Fix event feed, so as to reduce lag. Rewrite and put in an array (events as objects in array) (make event class?) (change the name?)
 
 BIG STUFF
