@@ -12,7 +12,7 @@
     <script src="street.js"></script>
     <script src="building.js"></script>
     <script src="workplace.js"></script>
-    <!--    <script src="hospital.js"></script>-->
+    <script src="hospital.js"></script>
 </head>
 <body>
 <div id="masterContainer">
@@ -29,33 +29,9 @@
         <h1>Events</h1>
     </div>
     <div id="eventBox">
-        <input type="text" placeholder="Filter events..." id="eventFilter" onkeyup="filterEvents()">
+        <input type="search" placeholder="Filter events..." id="eventFilter">
         <div id="eventsContainer">
             <table id="eventsTable">
-<!--                <tr>-->
-<!--                    <th style="width: 80%">-->
-<!--                        Event-->
-<!--                    </th>-->
-<!--                    <th>-->
-<!--                        Date-->
-<!--                    </th>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        John has just done a thing-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        August 2019-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        John has just done another thing-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        September 2019-->
-<!--                    </td>-->
-<!--                </tr>-->
             </table>
         </div>
     </div>
@@ -102,10 +78,18 @@
                 <button onclick="new School(1,3)">College & University</button>
             </div>
         </div>
-        <button onclick="preFabFamily()">Add family</button>
+        <button onclick="new Hospital()">Add Hospital</button>
+        <div class="dropDown">
+            <button class="dropBtn">Families</button>
+            <div class="dropDownContent">
+                <button onclick="preFabFamily(1)">1x</button>
+                <button onclick="preFabFamily(10)">10x</button>
+                <button onclick="preFabFamily(100)">100x</button>
+            </div>
+        </div>
+<!--        <button onclick="preFabFamily()">Add family</button>-->
         <button onclick="starterKit()">Add starter-kit</button>
         Not done:
-        <button>Hospitals</button>
         <button>Parks</button>
         <button>Police Stations</button>
         <button>Retirement Homes</button>

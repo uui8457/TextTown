@@ -1,5 +1,3 @@
-
-
 let city = {
     name: "City",
     streets: [],
@@ -23,6 +21,9 @@ let city = {
     get schools() {
         return this.buildings.filter(building => building instanceof School)
     },
+    get hospitals() {
+        return this.buildings.filter(building => building instanceof Hospital)
+    },
     get students() {
         let students = [];
         this.schools.forEach((school) => {
@@ -30,11 +31,19 @@ let city = {
         });
         return students.flat()
     },
+    get patients() {
+        let patients = [];
+        this.hospitals.forEach((hospital) => {
+            patients.push(hospital.patients)
+        });
+        return patients.flat()
+    },
     get info() {
         return [
             {property: "Streets", value: this.streets},
             {property: "Buildings", value: this.buildings},
             {property: "Schools", value: this.schools},
+            {property: "Hospitals", value: this.hospitals},
             {property: "Families", value: this.families},
             {property: "Population", value: this.population},
         ]
@@ -45,12 +54,12 @@ let stats = {
     get meanAge() {
         let totalMonthAge = 0;
         city.population.forEach(person => totalMonthAge += person.monthAge);
-        return (totalMonthAge/12)/city.population.length
+        return (totalMonthAge / 12) / city.population.length
     },
     get meanEducation() {
         let totalEducation = 0;
         city.population.forEach(person => totalEducation += person.educationLevel);
-        return totalEducation/city.population.length
+        return totalEducation / city.population.length
     },
     get info() {
         return [
@@ -86,10 +95,15 @@ let time = {
     }
 };
 
-
 window.addEventListener("DOMContentLoaded", () => {
     details(city);
-    themeChange("light")
+    themeChange("light");
+    document.getElementById("eventFilter").addEventListener("keyup", () => {
+        filterEvents()
+    });
+    document.getElementById("eventFilter").addEventListener("search", () => {
+        filterEvents()
+    });
 });
 
 // We listen to the resize event
@@ -180,7 +194,12 @@ function details(object) { //For a back button: add the previous object onclick 
     }
 
 
-    document.getElementById("infoTitle").innerText = object.name;
+    let title = document.getElementById("infoTitle");
+    title.innerText = object.name;
+    title.addEventListener('click', () => {
+        document.getElementById("eventFilter").value = object.name;
+        filterEvents();
+    });
 
     // console.log(object.info);
     for (let p = 0; p < object.info.length; p++) {
@@ -217,30 +236,30 @@ function details(object) { //For a back button: add the previous object onclick 
 }
 
 
-function preFabFamily() {
-    // createMembers() {
-    //Create adults, consider making it a possibility of having only one adult.
-    let members = [
-        new Person(myRand(30*12, 50*12), myRand(0, 3)),
-        new Person(myRand(30*12, 50*12), myRand(0, 3)),
-    ];
-    //Make the adults be each other's partners
-    members[0].partner = members[1];
-    members[1].partner = members[0];
+function preFabFamily(count) {
+    for (let n = 0; n < count; n++) {
+        //Create adults, consider making it a possibility of having only one adult.
+        let members = [
+            new Person(myRand(30 * 12, 50 * 12), myRand(0, 3)),
+            new Person(myRand(30 * 12, 50 * 12), myRand(0, 3)),
+        ];
+        //Make the adults be each other's partners
+        members[0].partner = members[1]; //But it works tho...
+        members[1].partner = members[0];
 
-    //Consider a different approach for creating children, with non-linear probability
-    for (let n = 0; n < myRand(0, 4); n++) {
-        let monthAge = myRand(0, 18 * 12);
-        let educationLevel = 0;
-        if (monthAge / 12 >= 15) {
-            educationLevel = 1
-        } else if (monthAge / 12 >= 18) {
-            educationLevel = 2
+        //Consider a different approach for creating children, with non-linear probability
+        for (let n = 0; n < myRand(0, 4); n++) {
+            let monthAge = myRand(0, 18 * 12);
+            let educationLevel = 0;
+            if (monthAge / 12 >= 15) {
+                educationLevel = 1
+            } else if (monthAge / 12 >= 18) {
+                educationLevel = 2
+            }
+            members.push(new Person(monthAge, educationLevel));
         }
-        members.push(new Person(monthAge, educationLevel));
+        new Family(members, randIn(surNames))
     }
-    new Family(members, randIn(surNames))
-    // }
 }
 
 function starterKit() {
@@ -253,10 +272,10 @@ function starterKit() {
     new School(1, 2);
     new School(1, 3);
 
+    new Hospital();
+
     new Residential(3, 2);
-    for (let n = 0; n < 10; n++) {
-        preFabFamily()
-    }
+    preFabFamily(10)
 }
 
 function themeChange(theme) {
@@ -270,15 +289,16 @@ function themeChange(theme) {
             darkStyle.disabled = false;
     }
 }
-let events = [
-];
+
+let events = [];
 
 function createEvent(inputEvent) {
     //Push into array, with date
     events.push({event: inputEvent, date: time.date});
     //call func "make tableRow"
-    createRow(events.length-1)
+    createRow(events.length - 1)
 }
+
 function createRow(index) {
     let textArray = events[index].event;
 
@@ -323,21 +343,20 @@ function filterEvents() {
 }
 
 function autoSplice(object, target) { //Probably necessary
-    // console.log(object, target);
-    for (const key in target) {
-        if (target.hasOwnProperty(key) && Array.isArray(target[key])) {
+    // console.log(object, object[target]);
+    let targetObject = object[target];
+    for (const key in targetObject) {
+        if (targetObject.hasOwnProperty(key) && Array.isArray(targetObject[key])) {
             // console.log(target[key]);
             //Find "object" in any property, and splice it if found
-            if (target[key].indexOf(object) !== -1) {
+            if (targetObject[key].indexOf(object) !== -1) {
                 // console.log("Success!");
-                let index = target[key].indexOf(object);
-                target[key].splice(index, 1);
-                console.log(target);
+                let index = targetObject[key].indexOf(object);
+                targetObject[key].splice(index, 1);
+                // console.log(object[target]);
                 object[target] = undefined;
+                // console.log(object[target]);
                 break
-            }
-            else  {
-                // console.log("Fail")
             }
         }
     }

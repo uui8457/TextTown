@@ -2538,7 +2538,6 @@ let surNames = ["Smith",
     "Haas",
     "Schuster",
     "Heilig",
-    "Name",
     "Peeters",
     "Janssens",
     "Maes",
@@ -2554,7 +2553,6 @@ let surNames = ["Smith",
     "Dupont",
     "Martin",
     "Simon",
-    "Name",
     "Joensen",
     "Hansen",
     "Jacobsen",
@@ -3120,6 +3118,9 @@ let industries = [
 ];
 let education = [
     "None", "Elementary", "High School", "University", "A literal god (impossible)"
+];
+let illness = [
+    "None", "Slight", "Severe", "Serious", "Critical", "A literal Zombie (impossible)"
 ];
 
 function myRand(lowest, highest) {

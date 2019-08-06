@@ -17,26 +17,51 @@ class Person {
     update() {
         this.monthAge += 1;
         // console.log(this.name + " is now " + this.age);
-        if (this.occupation === undefined && this.age < 70) {
+        if (this.occupation === undefined && this.age < 70 && this.sickness === 0) {
             this.findOccupation()
         }
+        //If sick
+        if (this.sickness > 0) {
+            if (!(this.occupationType === "Hospitalized")) {
+                this.findHospital()
+            } else {
+                if (Math.random() < 1 / 10000 && this.sickness === 4) {
+                    createEvent([this, "has been cured from their", illness[this.sickness], "illness!"]);
+                    this.sickness = 0;
+                    autoSplice(this, "occupation");
+                } else if (Math.random() < 1 / 1000 && this.sickness === 3) {
+                    createEvent([this, "has been cured from their", illness[this.sickness], "illness!"]);
+                    this.sickness = 0;
+                    autoSplice(this, "occupation");
+                } else if (Math.random() < 1 / 100 && this.sickness === 2) {
+                    createEvent([this, "has been cured from their", illness[this.sickness], "illness!"]);
+                    this.sickness = 0;
+                    autoSplice(this, "occupation");
+                } else if (Math.random() < 1 / 10 && this.sickness === 1) {
+                    createEvent([this, "has been cured from their", illness[this.sickness], "illness!"]);
+                    this.sickness = 0;
+                    autoSplice(this, "occupation");
+                }
+            }
+        }
+
         //Once every year
         if (time.month === 5) {
-            if (this.occupation instanceof School && (this.age === 15 || this.age === 18 || this.age === 23)) {
+            if (this.occupationType === "Studying" && (this.age === 15 || this.age === 18 || this.age === 23)) {
                 this.graduate()
             }
-            if (this.occupation instanceof Workplace && this.occupation.level < this.educationLevel) {
+            if (this.occupationType === "Working" && this.occupation.level < this.educationLevel) {
                 createEvent([this, "is underpaid and wants a better job."]);
                 this.findOccupation()
             }
             // risk at age x = Math.exp(x/20)/1000
         }
         //Retire:
-        if (this.occupation !== undefined && this.age >= 70) {
+        if (this.occupationType === "Working" && this.age >= 70) {
             createEvent([this, "has retired from their work at", this.occupation]);
             // this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
             // this.occupation = undefined;
-            autoSplice(this, this.occupation)
+            autoSplice(this, "occupation")
         }
 
         //Find a partner
@@ -64,22 +89,23 @@ class Person {
         }
 
         //Get sick: base risk divided again for levels
-        if (Math.random() < 1/1000 && this.sickness === 0) {
+        if (Math.random() < 1 / 1000 && this.sickness === 0) {
             //need to splice out of correct occ array
             // this.occupation = undefined;
-            autoSplice(this, this.occupation);
+            autoSplice(this, "occupation");
 
-            if (Math.random()<1/1000) {
-                this.sickness = 4
-            }
-            else if (Math.random()<1/100) {
-                this.sickness = 3
-            }
-            else if (Math.random()<1/10) {
-                this.sickness = 2
-            }
-            else {
-                this.sickness = 1
+            if (Math.random() < 1 / 1000) {
+                this.sickness = 4;
+                createEvent([this, "has gotten extremely sick"])
+            } else if (Math.random() < 1 / 100) {
+                this.sickness = 3;
+                createEvent([this, "has gotten very sick"])
+            } else if (Math.random() < 1 / 10) {
+                this.sickness = 2;
+                createEvent([this, "has gotten rather sick"])
+            } else {
+                this.sickness = 1;
+                createEvent([this, "has gotten slightly ill"])
             }
         }
 
@@ -91,27 +117,18 @@ class Person {
     }
 
     kill() {
-        if (this.occupation !== undefined) { //There has to be a better way of doing this
-            // this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
-            autoSplice(this, this.occupation);
+        if (this.occupation !== undefined) {
+            autoSplice(this, "occupation");
         }
         if (this.partner !== undefined) {
             this.partner.partner = undefined;
             this.partner = undefined
         }
-
-        // this.family.members.splice(this.family.members.indexOf(this), 1);
-        autoSplice(this, this.family);
-
-        if (this.family.members.length === 0) { //If this was the last one in the family, remove the whole family
-            // if (this.family.residence !== undefined) {
-            //     this.family.residence.residents.splice(this.family.residence.residents.indexOf(this.family), 1);
-            // }
-            // city.families.splice(city.families.indexOf(this.family), 1);
-            // newEvent(["The last member of", this.family.name, "is dead"])
-        } else {
+        if (this.family.members.length !== 0) {
             createEvent([this.family, "is mourning the loss of", this.name, "at the age of", this.age])
         }
+
+        autoSplice(this, "family");
     }
 
     get info() {
@@ -124,6 +141,7 @@ class Person {
             // {property: "Pay grade", value: education[this.occupation.level]}, //Breaks if no occupation is defined
             {property: "Education", value: education[this.educationLevel]},
             {property: "Birth date", value: time.calcDate(this.monthAge)},
+            {property: "Illness", value: illness[this.sickness]},
         ]
     }
 
@@ -133,21 +151,16 @@ class Person {
 
     get occupationType() {
         if (city.students.indexOf(this) !== -1) {
-            return "Student"
-        }
-        // else if (city.patients.indexOf(this) !== -1) {
-        //     return "Patient"
-        // }
-        else if (this.occupation === undefined && this.age < 16) {
+            return "Studying"
+        } else if (city.patients.indexOf(this) !== -1) {
+            return "Hospitalized"
+        } else if (this.occupation === undefined && this.age < 16) {
             return "Not going to school"
-        }
-        else if (this.occupation === undefined && this.age > 70) {
+        } else if (this.occupation === undefined && this.age > 70) {
             return "Retired"
-        }
-        else if (this.occupation === undefined) {
+        } else if (this.occupation === undefined) {
             return "Unemployed"
-        }
-        else {
+        } else {
             return "Working"
         }
     }
@@ -175,13 +188,6 @@ class Person {
     }
 
     findSchool(level) {
-        // let buildings = [];
-        // city.streets.forEach(function (street) {
-        //         buildings.push(street.buildings)
-        //     }
-        // );
-        // buildings.flat();
-        // let schools = city.buildings.filter(building => building instanceof School);
         let vacantSchools = city.schools.filter(school => school.level === level); // Needs to be modified so that only the correct type is selected
         // let schools = city.education.elementary.filter(school => school.students.length < school.seats);
         // console.log(vacantSchools);
@@ -239,12 +245,21 @@ class Person {
     }
 
     graduate() {
-        // Remove this from occupation, and give ++ educationlevel
+        // Remove this from occupation, and give ++ educationLevel
         this.educationLevel++;
         createEvent([this, "has graduated from", this.occupation]);
-        autoSplice(this, this.occupation);
+        autoSplice(this, "occupation")
         // this.occupation.students.splice(this.occupation.students.indexOf(this));
         // this.occupation = undefined;
 
+    }
+
+    findHospital() {
+        let vacantHospitals = city.hospitals.filter(hospital => hospital.beds > hospital.patients.length);
+        if (vacantHospitals.length !== 0) {
+            this.occupation = randIn(vacantHospitals);
+            this.occupation.patients.push(this);
+            createEvent([this, "is now getting care at", this.occupation])
+        }
     }
 }
