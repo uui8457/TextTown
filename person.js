@@ -6,7 +6,8 @@ class Person {
         this.monthAge = monthAge;
         this.occupation = undefined;
         this.educationLevel = educationLevel;
-        this.partner = undefined
+        this.partner = undefined;
+        this.sickness = 0;
     }
 
     get name() {
@@ -33,10 +34,10 @@ class Person {
         //Retire:
         if (this.occupation !== undefined && this.age >= 70) {
             createEvent([this, "has retired from their work at", this.occupation]);
-            this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
-            this.occupation = undefined;
+            // this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
+            // this.occupation = undefined;
+            autoSplice(this, this.occupation)
         }
-
 
         //Find a partner
         if (this.age >= 25 && this.partner === undefined) {
@@ -61,6 +62,27 @@ class Person {
                 new Family([this, this.partner], newSurname)
             }
         }
+
+        //Get sick: base risk divided again for levels
+        if (Math.random() < 1/1000 && this.sickness === 0) {
+            //need to splice out of correct occ array
+            // this.occupation = undefined;
+            autoSplice(this, this.occupation);
+
+            if (Math.random()<1/1000) {
+                this.sickness = 4
+            }
+            else if (Math.random()<1/100) {
+                this.sickness = 3
+            }
+            else if (Math.random()<1/10) {
+                this.sickness = 2
+            }
+            else {
+                this.sickness = 1
+            }
+        }
+
         //Die of old age
         if (Math.random() < Math.exp(this.age / 20) / 1000 && time.month === myRand(0, 11) && this.age > 30) { //Its way too deadly at a low age, but good at not going too old
             this.kill();
@@ -70,14 +92,16 @@ class Person {
 
     kill() {
         if (this.occupation !== undefined) { //There has to be a better way of doing this
-            this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
+            // this.occupation.workers.splice(this.occupation.workers.indexOf(this), 1);
+            autoSplice(this, this.occupation);
         }
         if (this.partner !== undefined) {
             this.partner.partner = undefined;
             this.partner = undefined
         }
 
-        this.family.members.splice(this.family.members.indexOf(this), 1);
+        // this.family.members.splice(this.family.members.indexOf(this), 1);
+        autoSplice(this, this.family);
 
         if (this.family.members.length === 0) { //If this was the last one in the family, remove the whole family
             // if (this.family.residence !== undefined) {
@@ -95,7 +119,8 @@ class Person {
             {property: "Age", value: this.age},
             {property: "Family", value: this.family},
             {property: "Partner", value: this.partner},
-            {property: "Occupation", value: this.occupation},
+            {property: "Currently", value: this.occupationType},
+            {property: "At", value: this.occupation},
             // {property: "Pay grade", value: education[this.occupation.level]}, //Breaks if no occupation is defined
             {property: "Education", value: education[this.educationLevel]},
             {property: "Birth date", value: time.calcDate(this.monthAge)},
@@ -106,6 +131,26 @@ class Person {
         return Math.floor(this.monthAge / 12)
     }
 
+    get occupationType() {
+        if (city.students.indexOf(this) !== -1) {
+            return "Student"
+        }
+        // else if (city.patients.indexOf(this) !== -1) {
+        //     return "Patient"
+        // }
+        else if (this.occupation === undefined && this.age < 16) {
+            return "Not going to school"
+        }
+        else if (this.occupation === undefined && this.age > 70) {
+            return "Retired"
+        }
+        else if (this.occupation === undefined) {
+            return "Unemployed"
+        }
+        else {
+            return "Working"
+        }
+    }
 
     findOccupation() {
         if (this.age > 5 && this.age <= 15 && this.educationLevel === 0) {
@@ -197,8 +242,9 @@ class Person {
         // Remove this from occupation, and give ++ educationlevel
         this.educationLevel++;
         createEvent([this, "has graduated from", this.occupation]);
-        this.occupation.students.splice(this.occupation.students.indexOf(this));
-        this.occupation = undefined;
+        autoSplice(this, this.occupation);
+        // this.occupation.students.splice(this.occupation.students.indexOf(this));
+        // this.occupation = undefined;
 
     }
 }

@@ -35,7 +35,7 @@ class Family { //Change it so that members are created separately and then put i
 
         if (this.members[0].partner === this.members[1] && this.members.length <= 4) { //if both parents are present. throws an error if one is dead, maybe?
             if (Math.random() > 1 - (Math.pow(this.members.length, 2) / 1000)) {
-                console.log("new baby");
+                // console.log("new baby");
                 let newBorn = new Person(0,0);
                 newBorn.family = this;
                 this.members.push(newBorn);
@@ -58,7 +58,7 @@ class Family { //Change it so that members are created separately and then put i
             this.residence = randIn(homelessPlaces);
         } else {
             this.residence = randIn(vacancies);
-            this.residence.residents.push(this);
+            // this.residence.residents.push(this);
             createEvent([this, "has just moved into a", this.residence, "at", this.residence.street, this.residence.streetNumber])
         }
     }

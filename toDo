@@ -25,3 +25,5 @@ BIG STUFF
 -Add graphs, using canvas?
 -Add happiness
 -Use database for info instead of large arrays. JSON?
+
+Find person in relevant place by performing search with indexOf?

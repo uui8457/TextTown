@@ -23,6 +23,13 @@ let city = {
     get schools() {
         return this.buildings.filter(building => building instanceof School)
     },
+    get students() {
+        let students = [];
+        this.schools.forEach((school) => {
+            students.push(school.students)
+        });
+        return students.flat()
+    },
     get info() {
         return [
             {property: "Streets", value: this.streets},
@@ -30,7 +37,6 @@ let city = {
             {property: "Schools", value: this.schools},
             {property: "Families", value: this.families},
             {property: "Population", value: this.population},
-            // {property: "Buildings", value: this.buildings},
         ]
     }
 };
@@ -167,14 +173,14 @@ function details(object) { //For a back button: add the previous object onclick 
     // };
     // openInfo.push(object);
     // console.log(openInfo);
+
     //Remove all the old info
     while (container.firstChild) {
         container.removeChild(container.lastChild)
     }
 
 
-    let title = document.getElementById("infoTitle");
-    title.innerText = object.name;
+    document.getElementById("infoTitle").innerText = object.name;
 
     // console.log(object.info);
     for (let p = 0; p < object.info.length; p++) {
@@ -312,6 +318,27 @@ function filterEvents() {
             eventRows[n].style.display = "";
         } else {
             eventRows[n].style.display = "none";
+        }
+    }
+}
+
+function autoSplice(object, target) { //Probably necessary
+    // console.log(object, target);
+    for (const key in target) {
+        if (target.hasOwnProperty(key) && Array.isArray(target[key])) {
+            // console.log(target[key]);
+            //Find "object" in any property, and splice it if found
+            if (target[key].indexOf(object) !== -1) {
+                // console.log("Success!");
+                let index = target[key].indexOf(object);
+                target[key].splice(index, 1);
+                console.log(target);
+                object[target] = undefined;
+                break
+            }
+            else  {
+                // console.log("Fail")
+            }
         }
     }
 }
